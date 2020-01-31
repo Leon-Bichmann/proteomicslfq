@@ -219,7 +219,7 @@ if (params.expdesign)
         .ifEmpty { exit 1, "params.expdesign was empty - no input files supplied" }
         .set { expdesign }
 }
-
+//TODO: else channel.empy()
 
 //Fill the channels with empty Channels in case that we want to add decoys. Otherwise fill with output from database.
 (searchengine_in_db, pepidx_in_db, plfq_in_db) = ( params.add_decoys
@@ -233,8 +233,7 @@ process generate_decoy_database {
      file(mydatabase) from db_for_decoy_creation
 
     output:
-     file "${database.baseName}_decoy.fasta" into searchengine_in_db_decoy, pepidx_in_db_decoy, plfq_in_db_decoy
-     //TODO need to add these channel with .mix(searchengine_in_db_decoy) for example to all subsequent processes that need this...
+     file "${mydatabase.baseName}_decoy.fasta" into searchengine_in_db_decoy, pepidx_in_db_decoy, plfq_in_db_decoy
 
     when:
      params.add_decoys
