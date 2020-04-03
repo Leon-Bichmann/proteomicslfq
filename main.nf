@@ -342,6 +342,14 @@ process mzml_indexing {
 
 branched_input_mzMLs.inputIndexedMzML.mix(mzmls_converted).mix(mzmls_indexed).into{mzmls_comet; mzmls_msgf; mzmls_plfq}
 
+if (params.expdesign)
+{
+    Channel
+        .fromPath(params.expdesign)
+        .ifEmpty { exit 1, "params.expdesign was empty - no input files supplied" }
+        .set { expdesign }
+}
+//TODO: else channel.empy()
 
 //Fill the channels with empty Channels in case that we want to add decoys. Otherwise fill with output from database.
 (searchengine_in_db_msgf, searchengine_in_db_comet, pepidx_in_db, plfq_in_db) = ( params.add_decoys
